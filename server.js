@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const dbName = 'notes-api';
 const MONGODB_URI= "mongodb+srv://Arnaud:Arnaud@cluster0-rnqbu.mongodb.net/notes-api?retryWrites=true&w=majority";
 const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-const axios = require('axios');
+
 // Parsing
 app.use(express.json())
 
@@ -18,10 +18,10 @@ app.get('/', function (req, res) {
 app.post('/notes', async function (req, res) { 
   var note = {
    notes: req.body.notes,
-   userId: req.body.userId,
+   userId: req.body.userId, // a remplacer par la suite !!!
    content: req.body.content,
-   createAt: req.body.createAt,
-   lastUdapted: req.body.lastUdapted
+   createAt: new Date,
+   lastUdapted: null
   };    
 
   await client.connect();
