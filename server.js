@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const dbName = 'notes-api';
 const MONGODB_URI= "mongodb+srv://Arnaud:Arnaud@cluster0-rnqbu.mongodb.net/notes-api?retryWrites=true&w=majority";
 const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
+const MongoObjectID = require('mongodb').ObjectID;
 // Parsing
 app.use(express.json())
 
@@ -15,9 +15,8 @@ app.get('/', function (req, res) {
 
 
 // POST method route
-app.post('/notes', async function (req, res) { 
+app.post('/notes', async function (req, res) { // A modifier en PUT par la suite !!
   var note = {
-   notes: req.body.notes,
    userId: req.body.userId, // a remplacer par la suite !!!
    content: req.body.content,
    createAt: new Date,
@@ -64,6 +63,20 @@ app.get('/notes/all', async function (req, res) {
       // Close connection
       client.close();
 
+});
+
+app.patch('/notes/:id', async function (req, res) { //besoin de la fonction de recherche user pour completer la fonction corecgtement (recupération de l'existant et remplacement si différent))
+  await client.connect();
+  console.log("Connected correctly to database");
+  const db = client.db(dbName);
+  const collection = db.collection('notes');
+  var objectId = new MongoObjectID(req.params._id);
+  console.log(objectId)
+  collection.updateOne(
+    {_id: objectId},
+    {$set : {content: req.body.content, lastUdapted: new Date}}
+  )
+  res.send('note modifiée')
 });
 
 var PORT = process.env.PORT || 3000;
