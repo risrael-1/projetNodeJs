@@ -1,25 +1,16 @@
 {
-  "name": "package.json",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "dependencies": {
-    "express": "^4.17.1",
-    "mongodb": "^3.5.5"
-  },
-  "devDependencies": {},
+  "name": "projetnodejs",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/risrael-1/projetNodeJs.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/risrael-1/projetNodeJs/issues"
-  },
-  "homepage": "https://github.com/risrael-1/projetNodeJs#readme"
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "hjs": "~0.0.6",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
+  }
 }
