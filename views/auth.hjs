@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+        <h1>{{ user }}</h1>
+    <p> name : {{ user }}</p>
+    <p> password : {{ password }}</p>
+  </body>
+</html>

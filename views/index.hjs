@@ -7,5 +7,16 @@
   <body>
     <h1>{{ title }}</h1>
     <p>Welcome to {{ title }}</p>
+     <body>
+    <form action="/auth" method='post'>
+        <label>Enter your name: </label>
+        <input type="text" name="user" >
+        <label>Enter your password: </label>
+        <input type="password" name="password" >
+    <div class="form-example">
+        <input type="submit" value="enregistrer!">
+    </div>
+    </form>
+  </body>
   </body>
 </html>
