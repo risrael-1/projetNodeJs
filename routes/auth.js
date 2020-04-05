@@ -1,42 +1,67 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router()
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+var passToken = process.env.JWT_KEY
+var userFunc = require('../controller/user');
 const MongoClient = require('mongodb').MongoClient;
 const dbName = 'notes-api';
 const MONGODB_URI= "mongodb+srv://Arnaud:Arnaud@cluster0-rnqbu.mongodb.net/notes-api?retryWrites=true&w=majority";
 const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const MongoObjectID = require('mongodb').ObjectID;
-const bcrypt = require('bcryptjs')
+
 
 /* GET users listing. */
 router.get('/auth', function(req, res, next) {
   res.render('index', { title: 'test' });
 });
+
+
+
 router.post('/', async function(req, res, next) {
     var pass = req.body.password
+    var username = req.body.user
     let salt = await bcrypt.genSalt(10)
     let hash = await bcrypt.hash(pass, salt)
-    // let compare = await bcrypt.compare(pass, "$2a$10$FcT/6dqAbsWxYarYjKTDTeJ5qM85r9zO9rpZSs5.gjCpufVBJMG/O")
-    console.log(hash)
-    console.log(compare)
+
     var auth = {
-     firstname: req.body.user,
+     firstname: username,
      password: hash
     };
-    res.render('auth', { user : req.body.user, 
-    password : hash });
-    await client.connect();
-    console.log("Connected correctly to database");
-    const db = client.db(dbName);
-    const collection = db.collection('users');
-    collection.insertOne(auth, null, function (error, results) {
-        if(error){
-        console.log('Une erreur est survenue ')
-        res.send('Une erreur est survenue ')
-        } else {
-        console.log('user ajoutée');
-        }
-  })
-  
+
+    if (pass < 4){
+        res.status(400).send('Le mot de passe doit contenir au moins 4 caractères')
+    }
+    else if (username < 2 ){
+        res.status(400).send('Votre identifiant doit contenir entre 2 et 20 caractères')
+    }
+    else{
+        await client.connect();
+        console.log("Connected correctly to database");
+        const db = client.db(dbName);
+        const col = db.collection('users');
+        const allUsers = await col.find().toArray();
+        allUsers.forEach(async function(i, obj) {
+            if (i.firstname === req.body.user){
+                res.status(400).send("Cet identifiant est déjà associé à un compte")
+            }
+             else {                
+                userFunc.postUser(auth)
+                var token = jwt.sign({auth}, "secret", { expiresIn: '24h' }, (err, token) => {
+                    res.json({
+                        token
+                    });
+                    if(err){
+                        console.log('error: ' + err)
+                    }
+                });
+                // res.render('auth', { user : req.body.user, 
+                //     password : hash });
+                // }
+            // })
+            }
+        })
+    }
 });
 
 module.exports = router;
