@@ -23,11 +23,12 @@ router.post('/', async function(req, res, next) {
             passwordDb = i.password
             decrypt = await bcrypt.compare(req.body.password, passwordDb)
             if (i.firstname === req.body.user && decrypt === true){
-                jwt.sign({user: i._id.toString()+i.firstname + i.password}, 'secretkey', { expiresIn: '24h' }, (err, token) => {
+                id = i._id.toString()
+                token  = jwt.sign({user: i._id.toString()+i.firstname + i.password}, 'secretkey', { expiresIn: '24h' })
                     res.json({
-                        token
+                        token,
+                        id
                     })
-                })
             }
             else {
                 console.log('Utilisateur ou mot de passe incorrecte')
