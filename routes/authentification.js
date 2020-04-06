@@ -10,7 +10,7 @@ var passToken = process.env.JWT_KEY
 var router = express.Router();
 
 router.get('/', async function(req, res, next) {
-    res.render('authentification', { title: 'test' });
+    res.render('authentification', { title: 'Authentification' });
   });
   
 router.post('/', async function(req, res, next) {

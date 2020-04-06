@@ -47,14 +47,10 @@ router.post('/', async function(req, res, next) {
             }
              else {                
                 userFunc.postUser(auth)
-                var token = jwt.sign({auth}, "secret", { expiresIn: '24h' }, (err, token) => {
+                var token = jwt.sign({auth}, "secret", { expiresIn: '24h' })
                     res.json({
                         token
                     });
-                    if(err){
-                        console.log('error: ' + err)
-                    }
-                });
                 // res.render('auth', { user : req.body.user, 
                 //     password : hash });
                 // }
