@@ -64,9 +64,9 @@ router.delete('/delete/:username', (req, res) => {
     const { username } = req.params;
     db.collection('username').findOneAndDelete({username: username}, 
     (err, result) => {
-    if (err) return res.send(500, err)
-    console.log('Ok');
-    res.redirect('/');
+        if (err) return res.send(500, err)
+        console.log('Ok');
+        res.redirect('/');
     });
 });
 
