@@ -7,14 +7,14 @@
   <body>
     <h1>{{ title }}</h1>
     <p>Welcome to {{ title }}</p>
-    <form action="/auth" method='post'>
+    <form action="" method='post'>
         <label>Enter your name: </label>
         <input type="text" name="firstname" >
         <label>Enter your password: </label>
         <input type="password" name="password" >
     <div class="form-example">
-        <input type="submit" value="enregistrer!"> <br/>
-        <a href="./authentification">Vous avez deja un compte?</a> 
+        <input type="submit" value="Connection!">
+        <a href="./">Vous n'avez pas de compte?</a> 
     </div>
     </form>
   </body>
