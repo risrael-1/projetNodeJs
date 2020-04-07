@@ -22,7 +22,7 @@ router.post('/', async function(req, res, next) {
         allUsers.forEach(async function(i, obj) {
             passwordDb = i.password
             decrypt = await bcrypt.compare(req.body.password, passwordDb)
-            if (i.firstname === req.body.user && decrypt === true){
+            if (i.firstname === req.body.firstname && decrypt === true){
                 id = i._id.toString()
                 token  = jwt.sign({user: i._id.toString()+i.firstname + i.password}, 'secretkey', { expiresIn: '24h' })
                     res.json({

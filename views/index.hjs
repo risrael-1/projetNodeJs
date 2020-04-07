@@ -10,7 +10,7 @@
      <body>
     <form action="/auth" method='post'>
         <label>Enter your name: </label>
-        <input type="text" name="user" >
+        <input type="text" name="firstname" >
         <label>Enter your password: </label>
         <input type="password" name="password" >
     <div class="form-example">

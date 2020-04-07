@@ -20,7 +20,7 @@ router.get('/auth', function(req, res, next) {
 
 router.post('/', async function(req, res, next) {
     var pass = req.body.password
-    var username = req.body.user
+    var username = req.body.firstname
     let salt = await bcrypt.genSalt(10)
     let hash = await bcrypt.hash(pass, salt)
 
@@ -58,6 +58,16 @@ router.post('/', async function(req, res, next) {
             }
         })
     }
+});
+
+router.delete('/delete/:username', (req, res) => {
+    const { username } = req.params;
+    db.collection('username').findOneAndDelete({username: username}, 
+    (err, result) => {
+    if (err) return res.send(500, err)
+    console.log('Ok');
+    res.redirect('/');
+    });
 });
 
 module.exports = router;
