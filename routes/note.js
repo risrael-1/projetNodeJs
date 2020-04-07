@@ -82,11 +82,7 @@ router.post('/notes', async function (req, res) { // A modifier en PUT par la su
   )
   //client.close();
   res.send('modification enregistrée')
-  /*
-  res.render('modify_note', {
-    title : '5e8c551b6225ec0cd0e0ada8',
-    
-  });*/
+  
   });
   
   router.get('/notes/all', async function (req, res) {           
