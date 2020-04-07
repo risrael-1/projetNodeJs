@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <p>Page de modification de note  {{ title }}</p>
+
+    <form method="post" action="/notes/{{id}}"> 
+      
+      <label>Modification de ma note :</label> 
+      <input name= "content" value="putmethod"/>
+      <br><br><br>
+      <button type="submit" formmethod="post">valider</button>
+     </form>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <p>Welcome to {{ title }}</p>
+
+    <form method="POST" action="/notes"> 
+      <label>Ma note :</label> 
+      <input  name= "content"/>
+      <br><br><br>
+      <button type="validate" formmethod="POST">enregistrer ma note</button>
+     </form>
+  </body>
+</html>
