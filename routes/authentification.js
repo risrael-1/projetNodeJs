@@ -13,26 +13,22 @@ router.get('/', async function(req, res, next) {
     res.render('authentification', { title: 'Authentification' });
   });
   
-router.post('/signin', async function(req, res, next) {
-        await client.connect();
-        console.log("Connected correctly to database");
-        const db = client.db(dbName);
-        const col = db.collection('users');
-        const allUsers = await col.find().toArray();
-        allUsers.forEach(async function(i, obj) {
-            passwordDb = i.password
-            decrypt = await bcrypt.compare(req.body.password, passwordDb)
-            if (i.firstname === req.body.firstname && decrypt === true){
-                id = i._id.toString()
-                token  = jwt.sign({user: i._id.toString()+i.firstname + i.password}, 'secretkey', { expiresIn: '24h' })
-                    res.json({
-                        token,
-                        id
-                    })
-            }
-            else {
-                console.log('Utilisateur ou mot de passe incorrecte')
-            }
-        });
-})
+  router.post('/signin', async function(req, res, next) {
+    await client.connect();
+    console.log("Connected correctly to database");
+    const db = client.db(dbName);
+    const col = db.collection('users');
+    var username = req.body.username;
+    var password = req.body.password;
+    const userExist = await col.findOne({"username": username});
+  
+    if(!userExist){
+      res.status(403).json('Cet identifiant est inconnu');
+    }
+    const comparePassword = bcrypt.compareSync(password, userExist.password);
+    if(!comparePassword) res.json('identifiant incorrect');
+    token  = jwt.sign({userId: userExist._id}, 'secretkey', { expiresIn: '24h' });
+    res.status(200).send({token: token, userId: userExist._id});
+   
+  })
   module.exports = router;
