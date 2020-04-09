@@ -12,38 +12,41 @@ const MongoObjectID = require('mongodb').ObjectID;
 /* 
 GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Inscription' });
+  //res.render('index', { title: 'Inscription' });
 });
 
 
 
 
-router.get('/notes/all', async function (req, res) {           
-  try {
-      await client.connect();
-      console.log("Connected correctly to database");
-
-      const db = client.db(dbName);
-      
-
-      // Get the collection
-      const col = db.collection('notes');
-      // Get the documents that match the query
-      const allNotes = await col.find().toArray();
-      client.close();
-      res.send(allNotes);
-      
-  } catch (err) {
-      console.log("note is hit")
-      console.log(err.stack);
-      console.log("fail to connect to database");
-
-  }
-  // Close connection
-});
 
 
+var userFunc = require('../controller/user');
 
+const bcrypt = require('bcryptjs')
+
+
+router.post('/signin', async function(req, res, next) {
+  await client.connect();
+  console.log("Connected correctly to database");
+  const db = client.db(dbName);
+  const col = db.collection('users');
+  const allUsers = await col.findOne({"username": username});
+  allUsers.forEach(async function(i, obj) {
+      passwordDb = i.password
+      decrypt = await bcrypt.compare(req.body.password, passwordDb)
+      if (i.username === req.body.username && decrypt === true){
+          id = i._id.toString()
+          token  = jwt.sign({user: i._id.toString()+i.username + i.password}, 'secretkey', { expiresIn: '24h' })
+              res.json({
+                  token,
+                  id
+              })
+      }
+      else {
+          console.log('Utilisateur ou mot de passe incorrecte')
+      }
+  });
+})
 
 
 module.exports = router;
