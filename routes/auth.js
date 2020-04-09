@@ -18,53 +18,66 @@ router.get('/auth', function(req, res, next) {
 
 
 
-router.post('/', async function(req, res, next) {
-    var pass = req.body.password
-    var username = req.body.firstname
+router.post('/signup', async function(req, res, next) {
+    var password = req.body.password;
+    var username = req.body.username;
+    console.log('pass = '+password)
+   // var my_regex = new RegExp("^((?=.*[a-z])(?=.{2,20})");
+  
+  console.log('test =  '+ typeof password)
+    
+  /*
+    if(!/[a-z]/.test(this.value))
+              return false;
+  res.send('ok')*/
+  
     let salt = await bcrypt.genSalt(10)
-    let hash = await bcrypt.hash(pass, salt)
-
-    var auth = {
-     firstname: username,
-     password: hash
+    let hash = await bcrypt.hash(password, salt)
+  
+    var user = {
+      username: username,
+     password: password
     };
-
-    if (pass < 4){
-        res.status(400).send('Le mot de passe doit contenir au moins 4 caractères')
-    }
-    else if (username < 2 ){
-        res.status(400).send('Votre identifiant doit contenir entre 2 et 20 caractères')
-    }
-    else{
+    
+    //var pass = user.password.toString();
+    
+  
         await client.connect();
         console.log("Connected correctly to database");
         const db = client.db(dbName);
         const col = db.collection('users');
-        const allUsers = await col.find().toArray();
-        allUsers.forEach(async function(i, obj) {
-            if (i.firstname === req.body.user){
-                res.status(400).send("Cet identifiant est déjà associé à un compte")
+        //const allUsers = await col.find().toArray();
+        if(username < 2 && username > 20){
+            res.json('Votre identifiant doit contenir entre 2 et 20 caractères')
+        }
+        if(password < 4){
+          res.json('Le mot de passe doit contenir au moins 4 caractères')
+        }
+  
+        const userExist = await col.findOne({"username": username});
+        if(userExist){
+          res.json('Cet identifiant est déjà associé à un compte');
+        }else {
+          col.insertOne(user, function (error, results) {
+            if(error){
+              res.json(err)
+            } else {
+              console.log('user ajoutée');
+              //client.close();
+              res.json(results.ops);
             }
-             else {                
-                userFunc.postUser(auth)
-                var token = jwt.sign({auth}, "secret", { expiresIn: '24h' })
-                    res.json({
-                        token
-                    });
-                // res.render('auth', { user : req.body.user, 
-                //     password : hash });
-                // }
-            // })
-            }
-        })
-    }
-});
+        
+          })
+        }
+  
+    
+  });
 
 router.delete('/delete/:username', (req, res) => {
     const { username } = req.params;
     db.collection('username').findOneAndDelete({username: username}, 
     (err, result) => {
-        if (err) return res.send(500, err)
+        if (err) return res.json(500, err)
         console.log('Ok');
         res.redirect('/');
     });

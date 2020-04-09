@@ -12,12 +12,12 @@ const MongoObjectID = require('mongodb').ObjectID;
 /* 
 GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Inscription' });
+  //res.render('index', { title: 'Inscription' });
 });
 
 
 
-
+/*
 router.get('/notes/all', async function (req, res) {           
   try {
       await client.connect();
@@ -44,6 +44,85 @@ router.get('/notes/all', async function (req, res) {
 
 
 
+
+var userFunc = require('../controller/user');
+
+const bcrypt = require('bcryptjs')
+
+router.post('/signup', async function(req, res, next) {
+  var password = req.body.password;
+  var username = req.body.username;
+  console.log('pass = '+password)
+ // var my_regex = new RegExp("^((?=.*[a-z])(?=.{2,20})");
+
+console.log('test =  '+ typeof password)
+  
+
+
+  let salt = await bcrypt.genSalt(10)
+  let hash = await bcrypt.hash(password, salt)
+
+  var user = {
+    username: username,
+   password: password
+  };
+  
+  //var pass = user.password.toString();
+  
+
+      await client.connect();
+      console.log("Connected correctly to database");
+      const db = client.db(dbName);
+      const col = db.collection('users');
+      //const allUsers = await col.find().toArray();
+      if(username < 2 && username > 20){
+          res.json('Votre identifiant doit contenir entre 2 et 20 caractères')
+      }
+      if(password < 4){
+        res.json('Le mot de passe doit contenir au moins 4 caractères')
+      }
+
+      const userExist = await col.findOne({"username": username});
+      if(userExist){
+        res.json('Cet identifiant est déjà associé à un compte');
+      }else {
+        col.insertOne(user, function (error, results) {
+          if(error){
+            res.json(err)
+          } else {
+            console.log('user ajoutée');
+            //client.close();
+            res.json(results.ops);
+          }
+      
+        })
+      }
+
+  
+});
+*/
+router.post('/signin', async function(req, res, next) {
+  await client.connect();
+  console.log("Connected correctly to database");
+  const db = client.db(dbName);
+  const col = db.collection('users');
+  const allUsers = await col.find().toArray();
+  allUsers.forEach(async function(i, obj) {
+      passwordDb = i.password
+      decrypt = await bcrypt.compare(req.body.password, passwordDb)
+      if (i.firstname === req.body.firstname && decrypt === true){
+          id = i._id.toString()
+          token  = jwt.sign({user: i._id.toString()+i.firstname + i.password}, 'secretkey', { expiresIn: '24h' })
+              res.json({
+                  token,
+                  id
+              })
+      }
+      else {
+          console.log('Utilisateur ou mot de passe incorrecte')
+      }
+  });
+})
 
 
 module.exports = router;

@@ -13,7 +13,7 @@ router.get('/', async function(req, res, next) {
     res.render('authentification', { title: 'Authentification' });
   });
   
-router.post('/', async function(req, res, next) {
+router.post('/signin', async function(req, res, next) {
         await client.connect();
         console.log("Connected correctly to database");
         const db = client.db(dbName);
