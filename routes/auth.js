@@ -32,11 +32,11 @@ router.post('/signup', async function(req, res, next) {
   res.send('ok')*/
   
     let salt = await bcrypt.genSalt(10)
-    let hash = await bcrypt.hash(password, salt)
+    let hash = await bcrypt.hashSync(password, salt);
   
     var user = {
       username: username,
-     password: password
+     password: hash
     };
     
     //var pass = user.password.toString();
