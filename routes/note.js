@@ -113,6 +113,24 @@ router.get('/notes/all', async function (req, res) {
   try {
     await client.connect();
     console.log("Connected correctly to database");
+    let token = req.headers['x-access-token'];
+    var responseToken;
+    if(!token) {
+      return res.status(401).send('Utilisateur non connecté');
+    }
+    jwt.verify(token, 'secretkey', function (err, results){
+      if(err) {
+        res.status(401).send('Utilisateur non connecté');
+      }
+      if(!results){
+        return res.status(401).send('null');
+      }
+      //res.status(200).send(results)
+      responseToken = results;
+    });
+ 
+
+
 
     const db = client.db(dbName);
     

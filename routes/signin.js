@@ -25,7 +25,7 @@ router.post('/signin', async function(req, res) {
   }
   const comparePassword = bcrypt.compareSync(password, userExist.password);
   if(!comparePassword) {
-    res.json('identifiant incorrect');
+    res.status(403).json('identifiant inconnu');
   } 
   token = jwt.sign({userId: userExist._id}, 'secretkey', { expiresIn: '24h' });
   res.status(200).send({token: token, userId: userExist._id});
