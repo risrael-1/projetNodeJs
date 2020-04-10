@@ -2,6 +2,7 @@
 
 Ce projet est un TP en NodeJS. Celui-ci permet de faire de la gestion de notes pour un professeur.
 Le lien du sujet est : http://adrienjoly.com/cours-nodejs/05-proj/
+L'appli est sur Heroku : https://git.heroku.com/projetennodejs.git
 
 Il sera nécessaire d'installer différents package.
 
@@ -22,5 +23,4 @@ Il sera nécessaire d'installer différents package.
 ```npm i jsonwebtoken```
 
 ## Démarrage de l'API
-
-$ npm start
+```$ npm start```
