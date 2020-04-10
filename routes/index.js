@@ -9,41 +9,11 @@ const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedT
 const MongoObjectID = require('mongodb').ObjectID;
 
 
-/*
+/* 
 GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Inscription' });
+  res.json('Hello world');
 });
-
-
-
-
-router.get('/notes/all', async function (req, res) {
-  try {
-      await client.connect();
-      console.log("Connected correctly to database");
-
-      const db = client.db(dbName);
-
-
-      // Get the collection
-      const col = db.collection('notes');
-      // Get the documents that match the query
-      const allNotes = await col.find().toArray();
-      client.close();
-      res.send(allNotes);
-
-  } catch (err) {
-      console.log("note is hit")
-      console.log(err.stack);
-      console.log("fail to connect to database");
-
-  }
-  // Close connection
-});
-
-
-
 
 
 module.exports = router;
