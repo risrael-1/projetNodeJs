@@ -35,6 +35,7 @@ router.post('/notes', async function (req, res) {
   
 router.put('/notes', async function (req, res, next) { 
   let token = req.headers['x-access-token'];
+  var responseToken;
   if(!token) {
     return res.status(401).send('Utilisateur non connecté');
   }
@@ -46,11 +47,12 @@ router.put('/notes', async function (req, res, next) {
       return res.status(401).send('null');
     }
     //res.status(200).send(results)
+    responseToken = results;
   });
   
  var objectId = new MongoObjectID(req.params._id);
   var note = {
-    userId: objectId, // a remplacer par la suite !!! En string
+    userId: responseToken.userId, // a remplacer par la suite !!! En string
     content: req.body.content,
     createAt: new Date,
     lastUdapted: null
@@ -76,6 +78,7 @@ router.put('/notes', async function (req, res, next) {
 
 router.patch('/notes/:id', async function (req, res) { 
   let token = req.headers['x-access-token'];
+
   if(!token) {
     return res.status(401).send('Utilisateur non connecté');
   }
@@ -86,6 +89,7 @@ router.patch('/notes/:id', async function (req, res) {
     if(!results){
       return res.status(401).send('null');
     }
+    
     //res.status(200).send(results)
   });
   
