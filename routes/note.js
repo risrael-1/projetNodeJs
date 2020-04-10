@@ -93,30 +93,34 @@ router.patch('/notes/:id', async function (req, res) {
   console.log("Connected correctly to database");
   const db = client.db(dbName);
   const collection = db.collection('notes');
-  var objectId = new MongoObjectID(req.params._id);
-  var note = collection.updateOne(
-    {_id: objectId},
+  var objectId = new MongoObjectID(req.params.id);
+
+
+  console.log(objectId)
+  collection.updateOne(
+    {"_id": objectId},
     {$set : {content: req.body.content, lastUdapted: new Date}}
   )
-console.log(note)
+  const note = await collection.findOne({"_id": objectId});
   //client.close();
+  console.log(note)
   res.status(200).send(note);
 });
 
 router.get('/notes/all', async function (req, res) {           
   try {
-      await client.connect();
-      console.log("Connected correctly to database");
+    await client.connect();
+    console.log("Connected correctly to database");
 
-      const db = client.db(dbName);
-      
+    const db = client.db(dbName);
+    
 
-      // Get the collection
-      const col = db.collection('notes');
-      // Get the documents that match the query
-      const allNotes = await col.find().toArray();
-      client.close();
-      res.send(allNotes);
+    // Get the collection
+    const col = db.collection('notes');
+    // Get the documents that match the query
+    const allNotes = await col.find().toArray();
+    client.close();
+    res.send(allNotes);
       
   } catch (err) {
       console.log("note is hit")
