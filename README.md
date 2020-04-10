@@ -5,6 +5,10 @@ Le lien du sujet est : http://adrienjoly.com/cours-nodejs/05-proj/
 
 Il sera nécessaire d'installer différents package.
 
+## Node modules
+
+```npm install``
+
 ## MongoDB
 ```npm i mongodb```
 
@@ -16,3 +20,7 @@ Il sera nécessaire d'installer différents package.
 
 ## Jsonwebtoken
 ```npm i jsonwebtoken```
+
+## Démarrage de l'API
+
+$ npm start
