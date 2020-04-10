@@ -9,8 +9,9 @@ var jwt = require('jsonwebtoken');
 var passToken = process.env.JWT_KEY
 var router = express.Router();
 
-  
-router.post('/signin', async function(req, res, next) {
+//export { connected };
+
+router.post('/signin', async function(req, res) {
   await client.connect();
   console.log("Connected correctly to database");
   const db = client.db(dbName);
@@ -31,20 +32,19 @@ router.post('/signin', async function(req, res, next) {
   
 })
 
-router.post('/connected', async function (req,res){
-  let token = req.header['x-acces-token'];
-  console.log(typeof token)
+router.post('/connected', async function connected (req,res){
+  let token = req.headers['x-access-token'];
   if(!token) {
     return res.status(401).send('Utilisateur non connecté');
   }
     jwt.verify(token, 'secretkey', function (err, results){
       if(err) {
-        res.status(401).send(null);
+        res.sendStatus(401);
       }
+
       res.status(200).send(results)
   });
-
-
 })
+
 
 module.exports = router;

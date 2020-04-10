@@ -17,15 +17,8 @@ router.post('/signup', async function(req, res, next) {
     var password = req.body.password;
     var username = req.body.username;
     console.log('pass = '+password)
-   // var my_regex = new RegExp("^((?=.*[a-z])(?=.{2,20})");
-  
+   // var my_regex = new RegExp("^(?=.*[a-z])(?=.{2,20})");
   console.log('test =  '+ typeof password)
-    
-  /*
-    if(!/[a-z]/.test(this.value))
-              return false;
-  res.send('ok')*/
-  
     let salt = await bcrypt.genSalt(10)
     let hash = await bcrypt.hashSync(password, salt);
   
@@ -33,10 +26,7 @@ router.post('/signup', async function(req, res, next) {
       username: username,
       password: hash
     };
-    
     //var pass = user.password.toString();
-    
-  
         await client.connect();
         console.log("Connected correctly to database");
         const db = client.db(dbName);
@@ -64,8 +54,6 @@ router.post('/signup', async function(req, res, next) {
             }
           })
         }
-  
-    
   });
 
 router.delete('/delete/:username', (req, res) => {
