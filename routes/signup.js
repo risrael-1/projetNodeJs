@@ -36,7 +36,7 @@ router.post('/signup', async function(req, res, next) {
   
     var user = {
       username: username,
-     password: hash
+      password: hash
     };
     
     //var pass = user.password.toString();

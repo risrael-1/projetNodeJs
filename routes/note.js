@@ -38,50 +38,50 @@ router.post('/notes', async function (req, res) { // A modifier en PUT par la su
   
   
   router.put('/notes', async function (req, res) { // A modifier en PUT par la suite !!
-  var objectId = new MongoObjectID(req.params._id);
-  var note = {
-    userId: objectId, // a remplacer par la suite !!! En string
-    content: req.body.content,
-    createAt: new Date,
-    lastUdapted: null
-  };    
-  
-  await client.connect();
-  console.log("Connected correctly to database");
-  const db = client.db(dbName);
-  const collection = db.collection('notes');
-  try {
-    collection.insertOne(note, function (error, results) {
-      if(error){
-        console.log('Une erreur est survenue ')
-        res.send('Une erreur est survenue ')
-      } else {
-        console.log('note ajoutée');
-        //client.close();
-        res.send(results.ops);
-      }
-  
-    })
-  
-  }catch {
-    res.send('Une erreur est survenue');
-  } 
+    var objectId = new MongoObjectID(req.params._id);
+    var note = {
+      userId: objectId, // a remplacer par la suite !!! En string
+      content: req.body.content,
+      createAt: new Date,
+      lastUdapted: null
+    };    
+    
+    await client.connect();
+    console.log("Connected correctly to database");
+    const db = client.db(dbName);
+    const collection = db.collection('notes');
+    try {
+      collection.insertOne(note, function (error, results) {
+        if(error){
+          console.log('Une erreur est survenue ')
+          res.send('Une erreur est survenue ')
+        } else {
+          console.log('note ajoutée');
+          //client.close();
+          res.send(results.ops);
+        }
+    
+      })
+    
+    }catch {
+      res.send('Une erreur est survenue');
+    } 
   })
   
   router.patch('/notes/:id', async function (req, res) { //besoin de la fonction de recherche user pour completer la fonction corecgtement (recupération de l'existant et remplacement si différent))
-  await client.connect();
-  console.log("Connected correctly to database");
-  const db = client.db(dbName);
-  const collection = db.collection('notes');
-  
-  var objectId = new MongoObjectID(req.params._id);
-  console.log(objectId)
-  collection.updateOne(//objectId
-    {_id: objectId},
-    {$set : {content: req.body.content, lastUdapted: new Date}}
-  )
-  //client.close();
-  res.send('modification enregistrée')
+    await client.connect();
+    console.log("Connected correctly to database");
+    const db = client.db(dbName);
+    const collection = db.collection('notes');
+    
+    var objectId = new MongoObjectID(req.params._id);
+    console.log(objectId)
+    collection.updateOne(//objectId
+      {_id: objectId},
+      {$set : {content: req.body.content, lastUdapted: new Date}}
+    )
+    //client.close();
+    res.send('modification enregistrée')
   
   });
   
