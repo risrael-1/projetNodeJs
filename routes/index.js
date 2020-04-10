@@ -9,7 +9,7 @@ const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedT
 const MongoObjectID = require('mongodb').ObjectID;
 
 
-/* 
+/*
 GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Inscription' });
@@ -18,13 +18,13 @@ router.get('/', function(req, res, next) {
 
 
 
-router.get('/notes/all', async function (req, res) {           
+router.get('/notes/all', async function (req, res) {
   try {
       await client.connect();
       console.log("Connected correctly to database");
 
       const db = client.db(dbName);
-      
+
 
       // Get the collection
       const col = db.collection('notes');
@@ -32,7 +32,7 @@ router.get('/notes/all', async function (req, res) {
       const allNotes = await col.find().toArray();
       client.close();
       res.send(allNotes);
-      
+
   } catch (err) {
       console.log("note is hit")
       console.log(err.stack);

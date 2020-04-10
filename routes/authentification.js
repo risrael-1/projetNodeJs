@@ -12,7 +12,7 @@ var router = express.Router();
 router.get('/', async function(req, res, next) {
     res.render('authentification', { title: 'Authentification' });
   });
-  
+
 router.post('/', async function(req, res, next) {
         await client.connect();
         console.log("Connected correctly to database");
