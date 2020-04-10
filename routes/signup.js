@@ -11,11 +11,6 @@ const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedT
 const MongoObjectID = require('mongodb').ObjectID;
 
 
-/* GET users listing. */
-router.get('/auth', function(req, res, next) {
-  res.render('index', { title: 'test' });
-});
-
 
 
 router.post('/signup', async function(req, res, next) {
@@ -64,9 +59,9 @@ router.post('/signup', async function(req, res, next) {
             } else {
               console.log('user ajoutée');
               //client.close();
-              res.json(results.ops);
+              let token = jwt.sign({id: user._id}, 'secretkey', {expiresIn: '24h'})
+              res.json(token);
             }
-        
           })
         }
   

@@ -9,9 +9,6 @@ var jwt = require('jsonwebtoken');
 var passToken = process.env.JWT_KEY
 var router = express.Router();
 
-router.get('/', async function(req, res, next) {
-    res.render('authentification', { title: 'Authentification' });
-  });
   
 router.post('/signin', async function(req, res, next) {
   await client.connect();
@@ -26,10 +23,28 @@ router.post('/signin', async function(req, res, next) {
     res.status(403).json('Cet identifiant est inconnu');
   }
   const comparePassword = bcrypt.compareSync(password, userExist.password);
-  if(!comparePassword) res.json('identifiant incorrect');
-  token  = jwt.sign({userId: userExist._id}, 'secretkey', { expiresIn: '24h' });
+  if(!comparePassword) {
+    res.json('identifiant incorrect');
+  } 
+  token = jwt.sign({userId: userExist._id}, 'secretkey', { expiresIn: '24h' });
   res.status(200).send({token: token, userId: userExist._id});
   
+})
+
+router.post('/connected', async function (req,res){
+  let token = req.header['x-acces-token'];
+  console.log(typeof token)
+  if(!token) {
+    return res.status(401).send('Utilisateur non connecté');
+  }
+    jwt.verify(token, 'secretkey', function (err, results){
+      if(err) {
+        res.status(401).send(null);
+      }
+      res.status(200).send(results)
+  });
+
+
 })
 
 module.exports = router;
